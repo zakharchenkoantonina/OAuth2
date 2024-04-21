@@ -1,0 +1,132 @@
+<?xml version='1.0'?>
+<model xmlns="http://www.cellml.org/cellml/1.0#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" cmeta:id="bhalla_model_1999" name="hatakeyama_model_2003">
+
+    </import>
+    <!--
+*******************************************************
+***         U   N   I   T   S                       ***
+*******************************************************
+-->
+<units name="s">
+      <unit units="second"/>
+   </units>
+   <units name="nm">
+      <unit prefix="nano" units="mole"/>
+	  <unit exponent="-1" units="litre"/>
+   </units>
+   <units name="flux">
+      <unit units="nm"/>
+      <unit exponent="-1" units="s"/>
+   </units>
+   <units name="first_order_rate_constant">
+      <unit exponent="-1" units="s"/>
+   </units>
+   <!--
+*********************************************************
+***       C   O   M   P   O   N   E   N   T   S       ***
+*********************************************************
+-->
+  <!--//value yet to find (now based on hatekeyama)-->
+   <component name="environment">
+      <variable cmeta:id="environment_time" name="time" public_interface="out" units="s"/>
+   </component>
+   <component name="RasGDPtoRasGTP">
+      <variable name="time" public_interface="in" units="s"/>
+      <variable name="ShGS" public_interface="in" units="nm"/>
+      <variable cmeta:id="RasGDPtoRasGTP_RasGTP" initial_value="0" name="RasGTP" public_interface="out" units="nm"/>
+      <variable initial_value="0.222" name="kf30" units="first_order_rate_constant"/>
+      <variable initial_value="0.181" name="k31" units="nm"/>
+      <variable initial_value="0.289" name="V32" units="flux"/>
+      <variable initial_value="0.0571" name="k32" units="nm"/>
+      <variable cmeta:id="RasGDPtoRasGTP_RasGDP" initial_value="120" name="RasGDP" units="nm"/>
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RasGDP</ci>
+            </apply>
+            <apply>
+               <plus/>
+               <apply>
+                  <minus/>
+                  <apply>
+                     <divide/>
+                     <apply>
+                        <times/>
+                        <ci>kf31</ci>
+                        <ci>ShGS</ci>
+                        <ci>RasGDP</ci>
+                     </apply>
+                     <apply>
+                        <plus/>
+                        <ci>k31</ci>
+                        <ci>RasGDP</ci>
+                     </apply>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V32</ci>
+                     <ci>RasGTP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k32</ci>
+                     <ci>RasGTP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+         <apply>
+            <eq/>
+            <apply>
+               <diff/>
+               <bvar>
+                  <ci>time</ci>
+               </bvar>
+               <ci>RasGTP</ci>
+            </apply>
+            <apply>
+               <minus/>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>kf31</ci>
+                     <ci>ShGS</ci>
+                     <ci>RasGDP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k31</ci>
+                     <ci>RasGDP</ci>
+                  </apply>
+               </apply>
+               <apply>
+                  <divide/>
+                  <apply>
+                     <times/>
+                     <ci>V32</ci>
+                     <ci>RasGTP</ci>
+                  </apply>
+                  <apply>
+                     <plus/>
+                     <ci>k32</ci>
+                     <ci>RasGTP</ci>
+                  </apply>
+               </apply>
+            </apply>
+         </apply>
+      </math>
+   </component>
+     <connection>
+        <map_components component_1="environment" component_2="RasGDPtoRasGTP"/>
+        <map_variables variable_1="t" variable_2="t"/>
+    </connection>
+</model>
